@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/salman/code/hops/REST-CPP-benchmark/basic-httplib/build",
+  "command": "/home/salman/usr/bin/gcc9/bin/g++  -I/home/salman/code/hops/REST-CPP-benchmark/basic-httplib/httplib -std=gnu++14 -o CMakeFiles/basic-httplib.dir/main.cpp.o -c /home/salman/code/hops/REST-CPP-benchmark/basic-httplib/main.cpp",
+  "file": "/home/salman/code/hops/REST-CPP-benchmark/basic-httplib/main.cpp",
+  "output": "CMakeFiles/basic-httplib.dir/main.cpp.o"
+}
+]
