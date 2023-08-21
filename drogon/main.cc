@@ -263,7 +263,7 @@ int main() {
       {Get});
 
   app().registerHandler(
-      "/dbop/{db}/{table}",
+      "/dbopsimd/{db}/{table}",
       [](const HttpRequestPtr &req,
          std::function<void(const HttpResponsePtr &)> &&callback,
          const std::string &db, const std::string table) {

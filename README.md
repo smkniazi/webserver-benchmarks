@@ -1,6 +1,6 @@
 # Testing web server performance written in Go / C++ 
 
-The aim of these tests is to find which language and libraries will deliver heighet throughput and lowest latency
+The aim of these tests is to find which language and libraries will deliver heighet throughput and lowest latency. 
 
  CPU: 12th Gen Intel(R) Core(TM) i9-12900HK
 

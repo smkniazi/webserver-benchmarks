@@ -44,7 +44,7 @@ func main() {
 		c.Status(200)
 	})
 
-	r.POST("/dbop/:db/:table", func(c *gin.Context) {
+	r.POST("/dbopjson/:db/:table", func(c *gin.Context) {
 		uriParams := PKReadPP{}
 		if err := c.ShouldBindUri(&uriParams); err != nil {
 			fmt.Printf("Error %v \n", err)
@@ -57,13 +57,22 @@ func main() {
 			return
 		}
 
-		// b, err := json.MarshalIndent(postParams, "", " ")
-		// if err != nil {
-		// fmt.Printf("Error %v\n", err)
-		// c.AbortWithError(400, err)
-		// return
-		// }
-		// fmt.Printf("Req is %s \n", string(b))
+		c.Writer.WriteString("OK")
+		c.Status(200)
+	})
+
+	r.POST("/dbopsimd/:db/:table", func(c *gin.Context) {
+		uriParams := PKReadPP{}
+		if err := c.ShouldBindUri(&uriParams); err != nil {
+			fmt.Printf("Error %v \n", err)
+		}
+
+		postParams := BatchOpRequest{}
+		if err := c.BindJSON(&postParams); err != nil {
+			fmt.Printf("Error %v\n", err)
+			c.AbortWithError(400, err)
+			return
+		}
 
 		c.Writer.WriteString("OK")
 		c.Status(200)
