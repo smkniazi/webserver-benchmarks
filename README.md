@@ -1,4 +1,4 @@
-# Testing web server performance of written in Go & C++ 
+# Testing web server performance written in Go / C++ 
 
 The aim of these tests is to find which language and libraries will deliver heighet throughput and lowest latency
 
