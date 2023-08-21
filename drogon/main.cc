@@ -18,7 +18,7 @@ using namespace simdjson;
 
 #define myprintf(...)     // printf(__VA_ARGS__)
 #define mycout(msg, obj)  // std::cout << msg << obj << std::endl
-#define MAX_THREADS  20
+#define MAX_THREADS  16
 
 char buffers[MAX_THREADS][BODY_MAX_SIZE];
 
@@ -225,6 +225,7 @@ int main() {
          std::function<void(const HttpResponsePtr &)> &&callback) {
         auto resp = HttpResponse::newHttpResponse();
         resp->setBody("Hello, World!");
+        resp->setStatusCode(drogon::HttpStatusCode::k200OK);
         callback(resp);
       },
       {Get});
@@ -238,6 +239,7 @@ int main() {
         work(t);
         auto resp = HttpResponse::newHttpResponse();
         resp->setBody("Hello, World!. With fixed delay");
+        resp->setStatusCode(drogon::HttpStatusCode::k200OK);
         callback(resp);
       },
       {Get});
@@ -255,6 +257,7 @@ int main() {
 
         auto resp = HttpResponse::newHttpResponse();
         resp->setBody("Hello, World!. With random delay");
+        resp->setStatusCode(drogon::HttpStatusCode::k200OK);
         callback(resp);
       },
       {Get});
@@ -272,6 +275,7 @@ int main() {
         if (error == SUCCESS) {
           auto resp = HttpResponse::newHttpResponse();
           resp->setBody("OK");
+          resp->setStatusCode(drogon::HttpStatusCode::k200OK);
           callback(resp);
         } else {
           printf("Operation failed\n");

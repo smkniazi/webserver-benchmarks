@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"runtime"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,7 @@ type URITime struct {
 }
 
 func main() {
+	runtime.GOMAXPROCS(16)
 	r := gin.New()
 	r.GET("/ping", func(c *gin.Context) {
 		c.Writer.WriteString("OK")
@@ -27,6 +29,7 @@ func main() {
 		time.Sleep(time.Duration(uriParams.Time) * time.Microsecond)
 
 		c.Writer.WriteString("OK")
+		c.Status(200)
 	})
 
 	r.GET("/ping/rand_delay/:time", func(c *gin.Context) {
@@ -38,6 +41,7 @@ func main() {
 		time.Sleep(time.Duration(rand.Intn(uriParams.Time)) * time.Microsecond)
 
 		c.Writer.WriteString("OK")
+		c.Status(200)
 	})
 
 	r.POST("/dbop/:db/:table", func(c *gin.Context) {
@@ -62,6 +66,7 @@ func main() {
 		// fmt.Printf("Req is %s \n", string(b))
 
 		c.Writer.WriteString("OK")
+		c.Status(200)
 	})
 
 	r.Run("0.0.0.0:4046") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
