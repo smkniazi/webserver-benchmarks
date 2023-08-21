@@ -2,7 +2,6 @@ cmake_minimum_required (VERSION 3.8)
 
 project (server LANGUAGES CXX VERSION 1.0.0)
 message(Before=${CMAKE_MODULE_PATH})
-# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} /home/salman/code/cpp/benchmarks/drogon/install_dir/usr/local/lib64/cmake/Drogon)
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} /home/salman/code/cpp/benchmarks/drogon/install_dir/lib64/cmake)
 message(After=${CMAKE_MODULE_PATH})
 
@@ -36,16 +35,14 @@ find_package(Threads REQUIRED)
 file(GLOB SRC
 	*.cc
 	*.c
+	*.cpp
+	*.h
 )
 
-
-
 find_package(OpenSSL REQUIRED)
-# target_link_libraries(untitled OpenSSL::SSL)
-# set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/home/salman/code/cpp/benchmarks/drogon/install_dir/usr/local/lib64/cmake/Drogon")
-# find_package(UUID REQUIRED)
 find_package(Drogon CONFIG REQUIRED)
 
 add_executable(${PROJECT_NAME} ${SRC})
-#target_link_libraries(${PROJECT_NAME} PRIVATE z jsoncpp uuid drogon.a trantor.a  OpenSSL::SSL)
+#target_compile_options(${PROJECT_NAME} PUBLIC -g)
+target_compile_options(${PROJECT_NAME} PUBLIC -O3)
 target_link_libraries(${PROJECT_NAME} PRIVATE z jsoncpp uuid Drogon::Drogon Trantor::Trantor  OpenSSL::SSL)

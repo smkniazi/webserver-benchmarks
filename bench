@@ -1,12 +1,16 @@
 #!/bin/bash
 set -e
+#set -x
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-URL="http://localhost:4046/coroutine"
-#URL="http://localhost:4046/ping"
-#URL="http://localhost:4046/ping/delay/000"
-#URL="http://localhost:4046/ping/rand_delay/10"
+LUA_SCRIPT="-s request1.lua"
+URL="http://localhost:4046/dbop/some_db/some_table"
+# URL="http://localhost:4046/ping"
+# URL="http://localhost:4046/ping/delay/000"
+# URL="http://localhost:4046/ping/rand_delay/10"
+#
+
 
 server_mask=0x0FFFF
 client_mask=0xF0000
@@ -19,6 +23,7 @@ SERVER_BIN=$DROGON_BIN
 BM_TYPE="drogon"
 BM_TIME="10s"
 BM_THREADS="10"
+BM_CONNECTIONS="20"
 
 help() {
 cat <<EOF
@@ -65,7 +70,7 @@ else
   exit 1
 fi
 
-
+BM_CONNECTIONS=$(echo "($BM_THREADS * 2)" | bc)
 
 $SERVER_BIN &
 server_pid=$!
@@ -73,7 +78,9 @@ taskset -p $server_mask $server_pid
 
 sleep 1
 
-wrk -d $BM_TIME -c $BM_THREADS -t $BM_THREADS --latency $URL &
+set -x
+wrk $LUA_SCRIPT -d $BM_TIME -c $BM_CONNECTIONS -t $BM_THREADS --latency $URL &
+set +x
 
 client_pid=$!
 taskset -p $client_mask $server_pid
