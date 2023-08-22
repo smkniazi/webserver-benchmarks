@@ -14,7 +14,7 @@ The aim of these tests is to find which language and libraries will deliver heig
 
 
 ```
-#,              GO, (go-gin + json)                                                  C++ (Drogon + simdjson)                                        GO (go-gin + gosimdjson)
+#,              GO, (go-gin + json)                                                  C++ (Drogon + simdjson)                                        GO (go-gin + gosimdjson)                                        C++ (Drogon + glaze)                 
                                                       PING
 
 Running 15s test @ http://localhost:4046/ping                   |   Running 15s test @ http://localhost:4046/ping
@@ -36,39 +36,65 @@ Transfer/sec:     62.00MB                                       |   Transfer/sec
                                                       DB Operation
                                                       Body Size. Number of sub-operations: 1
 
-Running 15s test @ http://localhost:4046/dbop/some_db/some_table |  Running 15s test @ http://localhost:4046/dbop/some_db/some_table  |   Running 15s test @ http://localhost:4046/dbopsimd/some_db/some_table
-  40 threads and 80 connections                                  |    40 threads and 80 connections                                   |     40 threads and 80 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev              |    Thread Stats   Avg      Stdev     Max   +/- Stdev               |     Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     0.97ms    1.39ms  33.72ms   84.90%               |      Latency   238.18us  292.12us  21.99ms   96.07%                |       Latency     1.54ms    1.96ms  49.31ms   86.40%
-    Req/Sec     4.80k   516.32     6.94k    70.40%               |      Req/Sec     9.12k     3.47k   29.55k    76.57%                |       Req/Sec     2.31k   329.47     5.72k    74.73%
-  Latency Distribution                                           |    Latency Distribution                                            |     Latency Distribution
-     50%  278.00us                                               |       50%  195.00us                                                |        50%  550.00us
-     75%    1.39ms                                               |       75%  288.00us                                                |        75%    2.54ms
-     90%    2.94ms                                               |       90%  397.00us                                                |        90%    3.95ms
-     99%    5.88ms                                               |       99%  764.00us                                                |        99%    8.40ms
-  2883520 requests in 15.10s, 324.49MB read                      |    5481610 requests in 15.10s, 726.65MB read                       |     1378464 requests in 15.10s, 155.12MB read
-Requests/sec: 190965.27                                          |  Requests/sec: 363035.15                                           |   Requests/sec:  91288.70
-Transfer/sec:     21.49MB                                        |  Transfer/sec:     48.12MB                                         |   Transfer/sec:     10.27MB
+Running 15s test @ http://localhost:4046/dbop/some_db/some_table |  Running 15s test @ http://localhost:4046/dbop/some_db/some_table  |   Running 15s test @ http://localhost:4046/dbopsimd/some_db/some_table |  Running 15s test @ http://localhost:4046/dbopglaze/some_db/some_table
+  40 threads and 80 connections                                  |    40 threads and 80 connections                                   |     40 threads and 80 connections                                      |    40 threads and 80 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev              |    Thread Stats   Avg      Stdev     Max   +/- Stdev               |     Thread Stats   Avg      Stdev     Max   +/- Stdev                  |    Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.97ms    1.39ms  33.72ms   84.90%               |      Latency   238.18us  292.12us  21.99ms   96.07%                |       Latency     1.54ms    1.96ms  49.31ms   86.40%                   |      Latency   314.80us  709.12us  33.56ms   97.80%
+    Req/Sec     4.80k   516.32     6.94k    70.40%               |      Req/Sec     9.12k     3.47k   29.55k    76.57%                |       Req/Sec     2.31k   329.47     5.72k    74.73%                   |      Req/Sec     8.93k     3.61k   28.34k    71.60%
+  Latency Distribution                                           |    Latency Distribution                                            |     Latency Distribution                                               |    Latency Distribution
+     50%  278.00us                                               |       50%  195.00us                                                |        50%  550.00us                                                   |       50%  179.00us
+     75%    1.39ms                                               |       75%  288.00us                                                |        75%    2.54ms                                                   |       75%  322.00us
+     90%    2.94ms                                               |       90%  397.00us                                                |        90%    3.95ms                                                   |       90%  594.00us
+     99%    5.88ms                                               |       99%  764.00us                                                |        99%    8.40ms                                                   |       99%    1.67ms
+  2883520 requests in 15.10s, 324.49MB read                      |    5481610 requests in 15.10s, 726.65MB read                       |     1378464 requests in 15.10s, 155.12MB read                          |    5347445 requests in 15.10s, 708.86MB read
+Requests/sec: 190965.27                                          |  Requests/sec: 363035.15                                           |   Requests/sec:  91288.70                                              |  Requests/sec: 354139.56
+Transfer/sec:     21.49MB                                        |  Transfer/sec:     48.12MB                                         |   Transfer/sec:     10.27MB                                            |  Transfer/sec:     46.94MB
 
 
 
                                                       DB Operation
                                                       Body Size. Number of sub-operations: 10
 
-Running 15s test @ http://localhost:4046/dbop/some_db/some_table  |  Running 15s test @ http://localhost:4046/dbop/some_db/some_table | Running 15s test @ http://localhost:4046/dbopsimd/some_db/some_table
-  40 threads and 80 connections                                   |    40 threads and 80 connections                                  |   40 threads and 80 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev               |    Thread Stats   Avg      Stdev     Max   +/- Stdev              |     Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency     2.61ms    3.40ms  49.95ms   84.27%                |      Latency   257.59us  389.75us  23.08ms   98.97%               |     Latency     2.00ms    2.34ms  36.48ms   86.73%
-    Req/Sec     1.57k   228.18     2.57k    68.64%                |      Req/Sec     8.43k     1.95k   20.65k    73.77%               |     Req/Sec     1.53k   215.54     2.49k    70.39%
-  Latency Distribution                                            |    Latency Distribution                                           |   Latency Distribution
-     50%  809.00us                                                |       50%  225.00us                                               |      50%  849.00us
-     75%    4.33ms                                                |       75%  289.00us                                               |      75%    3.30ms
-     90%    7.16ms                                                |       90%  369.00us                                               |      90%    4.88ms
-     99%   14.79ms                                                |       99%  652.00us                                               |      99%   10.09ms
-  942597 requests in 15.10s, 106.07MB read                        |    5067327 requests in 15.10s, 671.73MB read                      |   915886 requests in 15.10s, 103.07MB read
-Requests/sec:  62428.45                                           |  Requests/sec: 335603.99                                          | Requests/sec:  60657.29
-Transfer/sec:      7.03MB                                         |  Transfer/sec:     44.49MB                                        | Transfer/sec:      6.83MB
+Running 15s test @ http://localhost:4046/dbop/some_db/some_table  |  Running 15s test @ http://localhost:4046/dbop/some_db/some_table | Running 15s test @ http://localhost:4046/dbopsimd/some_db/some_table   |     Running 15s test @ http://localhost:4046/dbopglaze/some_db/some_table
+  40 threads and 80 connections                                   |    40 threads and 80 connections                                  |   40 threads and 80 connections                                        |       40 threads and 80 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev               |    Thread Stats   Avg      Stdev     Max   +/- Stdev              |     Thread Stats   Avg      Stdev     Max   +/- Stdev                  |       Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     2.61ms    3.40ms  49.95ms   84.27%                |      Latency   257.59us  389.75us  23.08ms   98.97%               |     Latency     2.00ms    2.34ms  36.48ms   86.73%                     |         Latency   400.20us    0.91ms  25.36ms   98.34%
+    Req/Sec     1.57k   228.18     2.57k    68.64%                |      Req/Sec     8.43k     1.95k   20.65k    73.77%               |     Req/Sec     1.53k   215.54     2.49k    70.39%                     |         Req/Sec     6.63k     2.08k   26.55k    73.69%
+  Latency Distribution                                            |    Latency Distribution                                           |   Latency Distribution                                                 |       Latency Distribution
+     50%  809.00us                                                |       50%  225.00us                                               |      50%  849.00us                                                     |          50%  272.00us
+     75%    4.33ms                                                |       75%  289.00us                                               |      75%    3.30ms                                                     |          75%  380.00us
+     90%    7.16ms                                                |       90%  369.00us                                               |      90%    4.88ms                                                     |          90%  502.00us
+     99%   14.79ms                                                |       99%  652.00us                                               |      99%   10.09ms                                                     |          99%    4.45ms
+  942597 requests in 15.10s, 106.07MB read                        |    5067327 requests in 15.10s, 671.73MB read                      |   915886 requests in 15.10s, 103.07MB read                             |       3970250 requests in 15.10s, 526.30MB read
+Requests/sec:  62428.45                                           |  Requests/sec: 335603.99                                          | Requests/sec:  60657.29                                                |     Requests/sec: 262935.10
+Transfer/sec:      7.03MB                                         |  Transfer/sec:     44.49MB                                        | Transfer/sec:      6.83MB                                              |     Transfer/sec:     34.85MB
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

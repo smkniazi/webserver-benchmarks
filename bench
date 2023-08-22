@@ -5,9 +5,10 @@ set -e
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 #LUA_SCRIPT=""
- # LUA_SCRIPT="-s request1.lua"
+# LUA_SCRIPT="-s request1.lua"
 LUA_SCRIPT="-s request10.lua"
-URL="http://localhost:4046/dbopsimd/some_db/some_table"
+#URL="http://localhost:4046/dbopsimd/some_db/some_table"
+URL="http://localhost:4046/dbopglaze/some_db/some_table"
 # URL="http://localhost:4046/dbopjson/some_db/some_table"
 # URL="http://localhost:4046/ping"
 # URL="http://localhost:4046/ping/delay/000"
@@ -20,10 +21,10 @@ client_mask=0xF0000
 
 
 GO_BIN=$DIR/go-gin/server
-DROGON_BIN=$DIR/drogon/build/server
-SERVER_BIN=$DROGON_BIN
+CPP_BIN=$DIR/cpp/build/server
+SERVER_BIN=$CPP_BIN
 
-BM_TYPE="drogon"
+BM_TYPE="cpp"
 BM_TIME="10s"
 BM_THREADS="10"
 BM_CONNECTIONS="20"
@@ -32,7 +33,7 @@ help() {
 cat <<EOF
    ./bench [-d duration] [-b benchmark_name] 
    -d duration. e.g. 10s 
-   -b benchmark_name. e.g. drogon, go, ...
+   -b benchmark_name. e.g. cpp, go, ...
    -t num_threads. e.g. 10 
 EOF
 }
@@ -59,9 +60,9 @@ shift $((OPTIND - 1))
 [ "$1" = "--" ] && shift
 
 
-if [ "$BM_TYPE" = "drogon" ]; then
-  echo "Testing drogon"
-  SERVER_BIN=$DROGON_BIN
+if [ "$BM_TYPE" = "cpp" ]; then
+  echo "Testing cpp"
+  SERVER_BIN=$CPP_BIN
 
 elif [ "$BM_TYPE" = "go" ]; then
   echo "Testing go-gin"

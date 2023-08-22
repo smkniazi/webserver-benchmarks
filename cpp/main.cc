@@ -9,7 +9,9 @@
 #include <string_view>
 #include <thread>
 #define NDEBUG
+#include "myglaze.h"
 #include "simdjson.h"
+
 using namespace drogon;
 using namespace drogon::orm;
 using namespace simdjson;
@@ -18,7 +20,7 @@ using namespace simdjson;
 
 #define myprintf(...)     // printf(__VA_ARGS__)
 #define mycout(msg, obj)  // std::cout << msg << obj << std::endl
-#define MAX_THREADS  16
+#define MAX_THREADS 16
 
 char buffers[MAX_THREADS][BODY_MAX_SIZE];
 
@@ -46,10 +48,10 @@ void stressCPU(int durationInMs) {
 }
 
 int parseBody(std::basic_string_view<char> &req_body, int thradID) {
-char * json = buffers[thradID];
+  char *json = buffers[thradID];
 
   if (req_body.size() >= (BODY_MAX_SIZE - SIMDJSON_PADDING)) {
-    return error_code::INSUFFICIENT_PADDING;
+    return simdjson::error_code::INSUFFICIENT_PADDING;
   }
 
   memcpy(json, req_body.data(), req_body.size());
@@ -58,7 +60,7 @@ char * json = buffers[thradID];
   ondemand::parser parser;
   ondemand::document doc;
 
-  error_code error;
+  simdjson::error_code error;
   error = parser.iterate(json, req_body.size(), BODY_MAX_SIZE).get(doc);
 
   if (error) {
@@ -66,13 +68,14 @@ char * json = buffers[thradID];
     return error;
   } else {
     ondemand::array operations_arr;
-    error_code error = doc["operations"].get_array().get(operations_arr);
+    simdjson::error_code error =
+        doc["operations"].get_array().get(operations_arr);
 
     for (auto arr_element : operations_arr) {
       myprintf("\n------------\n");
 
       ondemand::object operation;
-      error_code error = arr_element.get(operation);
+      simdjson::error_code error = arr_element.get(operation);
       if (error) {
         myprintf(
             "Parsing request failed Failed to read op. Error: %d. Line: %d \n",
@@ -127,7 +130,7 @@ char * json = buffers[thradID];
           // list of filter objects
           for (auto arr_element : filters_arr) {
             ondemand::object filter;
-            error_code error = arr_element.get(filter);
+            simdjson::error_code error = arr_element.get(filter);
             if (error) {
               myprintf(
                   "Parsing request failed Failed to read filter obj. Error: "
@@ -167,7 +170,7 @@ char * json = buffers[thradID];
           } else {
             for (auto arr_element : read_columns_arr) {
               ondemand::object read_column;
-              error_code error = arr_element.get(read_column);
+              simdjson::error_code error = arr_element.get(read_column);
               if (error) {
                 myprintf(
                     "Parsing request failed Failed to read read col obj. "
@@ -270,7 +273,7 @@ int main() {
         auto req_body = req->getBody();
         // printf("Current thread %d\n",app().getCurrentThreadIndex());
 
-          int error = parseBody(req_body, app().getCurrentThreadIndex());
+        int error = parseBody(req_body, app().getCurrentThreadIndex());
 
         if (error == SUCCESS) {
           auto resp = HttpResponse::newHttpResponse();
@@ -283,6 +286,42 @@ int main() {
           resp->setBody("NACK");
           resp->setStatusCode(drogon::HttpStatusCode::k400BadRequest);
           callback(resp);
+        }
+      },
+      {Post});
+
+  app().registerHandler(
+      "/dbopglaze/{db}/{table}",
+      [](const HttpRequestPtr &req,
+         std::function<void(const HttpResponsePtr &)> &&callback,
+         const std::string &db, const std::string table) {
+        auto req_body = req->getBody();
+        // printf("Current thread %d\n",app().getCurrentThreadIndex());
+
+        string body_str = std::string(req_body);
+        auto resp = HttpResponse::newHttpResponse();
+        auto s = glz::read_json<BatchOpRequest>(body_str);
+        if (s) {
+          BatchOpRequest batchOpRequest = s.value();
+          if (batchOpRequest.Operations.size() != 0) {
+            resp->setBody("OK");
+            resp->setStatusCode(drogon::HttpStatusCode::k200OK);
+            callback(resp);
+            return;
+          } else {
+            printf("Operation failed\n");
+            resp->setBody("NACK");
+            resp->setStatusCode(drogon::HttpStatusCode::k400BadRequest);
+            callback(resp);
+            return;
+          }
+
+        } else {
+          printf("Operation failed\n");
+          resp->setBody("NACK");
+          resp->setStatusCode(drogon::HttpStatusCode::k400BadRequest);
+          callback(resp);
+          return;
         }
       },
       {Post});
