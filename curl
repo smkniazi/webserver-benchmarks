@@ -9,11 +9,38 @@ read -r -d '' BODY << EOM
         "filters": [
           {
             "column": "id0",
-            "value": 0
+            "value": "0"
           },
           {
             "column": "id1",
-            "value": 0
+            "value": "0"
+          }
+        ],
+        "readColumns": [
+          {
+            "column": "col0",
+            "dataReturnType": "default"
+          },
+          {
+            "column": "col1",
+            "dataReturnType": "default"
+          }
+        ],
+        "operationId": "1"
+      }
+    },
+    {
+      "method": "POST",
+      "relative-url": "my_database_1/my_table_1/pk-read",
+      "body": {
+        "filters": [
+          {
+            "column": "id0",
+            "value": "0"
+          },
+          {
+            "column": "id1",
+            "value": "0"
           }
         ],
         "readColumns": [
@@ -33,4 +60,4 @@ read -r -d '' BODY << EOM
 }
 EOM
 
-curl -X POST  http://localhost:4046/dbop/db1/table1 -H 'Content-Type: application/json' -d "$BODY"
+curl -X POST  http://localhost:4046/dbopsimd/db1/table1 -H 'Content-Type: application/json' -d "$BODY"

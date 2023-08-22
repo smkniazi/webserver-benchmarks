@@ -45,8 +45,8 @@ type PKReadBody struct {
 }
 
 type Filter struct {
-	Column *string          `json:"column"   form:"column"   binding:"required,min=1,max=64"`
-	Value  *json.RawMessage `json:"value"    form:"value"    binding:"required"`
+	Column *string `json:"column"   form:"column"   binding:"required,min=1,max=64"`
+	Value  *string `json:"value"    form:"value"    binding:"required"`
 }
 
 func (f Filter) String() string {

@@ -11,11 +11,11 @@ wrk.body   = [[
         "filters": [
           {
             "column": "id0",
-            "value": 0
+            "value": "0"
           },
           {
             "column": "id1",
-            "value": 0
+            "value": "0"
           }
         ],
         "readColumns": [
@@ -37,11 +37,11 @@ wrk.body   = [[
         "filters": [
           {
             "column": "id0",
-            "value": 0
+            "value": "0"
           },
           {
             "column": "id1",
-            "value": 0
+            "value": "0"
           }
         ],
         "readColumns": [
@@ -63,11 +63,11 @@ wrk.body   = [[
         "filters": [
           {
             "column": "id0",
-            "value": 0
+            "value": "0"
           },
           {
             "column": "id1",
-            "value": 0
+            "value": "0"
           }
         ],
         "readColumns": [
@@ -89,11 +89,11 @@ wrk.body   = [[
         "filters": [
           {
             "column": "id0",
-            "value": 0
+            "value": "0"
           },
           {
             "column": "id1",
-            "value": 0
+            "value": "0"
           }
         ],
         "readColumns": [
@@ -115,11 +115,11 @@ wrk.body   = [[
         "filters": [
           {
             "column": "id0",
-            "value": 0
+            "value": "0"
           },
           {
             "column": "id1",
-            "value": 0
+            "value": "0"
           }
         ],
         "readColumns": [
@@ -141,11 +141,11 @@ wrk.body   = [[
         "filters": [
           {
             "column": "id0",
-            "value": 0
+            "value": "0"
           },
           {
             "column": "id1",
-            "value": 0
+            "value": "0"
           }
         ],
         "readColumns": [
@@ -167,11 +167,11 @@ wrk.body   = [[
         "filters": [
           {
             "column": "id0",
-            "value": 0
+            "value": "0"
           },
           {
             "column": "id1",
-            "value": 0
+            "value": "0"
           }
         ],
         "readColumns": [
@@ -193,11 +193,11 @@ wrk.body   = [[
         "filters": [
           {
             "column": "id0",
-            "value": 0
+            "value": "0"
           },
           {
             "column": "id1",
-            "value": 0
+            "value": "0"
           }
         ],
         "readColumns": [
@@ -219,11 +219,11 @@ wrk.body   = [[
         "filters": [
           {
             "column": "id0",
-            "value": 0
+            "value": "0"
           },
           {
             "column": "id1",
-            "value": 0
+            "value": "0"
           }
         ],
         "readColumns": [

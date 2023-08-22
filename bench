@@ -5,7 +5,7 @@ set -e
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 #LUA_SCRIPT=""
-# LUA_SCRIPT="-s request1.lua"
+ # LUA_SCRIPT="-s request1.lua"
 LUA_SCRIPT="-s request10.lua"
 URL="http://localhost:4046/dbopsimd/some_db/some_table"
 # URL="http://localhost:4046/dbopjson/some_db/some_table"
