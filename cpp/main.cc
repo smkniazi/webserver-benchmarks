@@ -9,6 +9,7 @@
 #include <memory>
 #include <string_view>
 #include <thread>
+#include "data-structs.h"
 #include "myglaze.h"
 #include "myyyjson.h"
 #include "simdjson.h"
@@ -17,6 +18,8 @@
 using namespace drogon;
 using namespace drogon::orm;
 using namespace simdjson;
+
+bool serialization = true;
 
 #define BODY_MAX_SIZE 1024 * 1024 + SIMDJSON_PADDING
 
@@ -49,7 +52,7 @@ void stressCPU(int durationInMs) {
   }
 }
 
-int parseBody(std::basic_string_view<char> &req_body, int thradID) {
+int simdJsonParse(std::basic_string_view<char> &req_body, int thradID, int *opCount) {
   char *json = buffers[thradID];
 
   if (req_body.size() >= (BODY_MAX_SIZE - SIMDJSON_PADDING)) {
@@ -74,6 +77,7 @@ int parseBody(std::basic_string_view<char> &req_body, int thradID) {
         doc["operations"].get_array().get(operations_arr);
 
     for (auto arr_element : operations_arr) {
+      opCount++;
       myprintf("\n------------\n");
 
       ondemand::object operation;
@@ -221,7 +225,6 @@ int parseBody(std::basic_string_view<char> &req_body, int thradID) {
 }
 
 int main() {
-
   app().registerHandler(
       "/ping",
       [](const HttpRequestPtr &,
@@ -273,9 +276,16 @@ int main() {
         auto req_body = req->getBody();
         // printf("Current thread %d\n",app().getCurrentThreadIndex());
 
-        int error = parseBody(req_body, app().getCurrentThreadIndex());
+        int opCount = 0;
+        int error = simdJsonParse(req_body, app().getCurrentThreadIndex(), &opCount);
 
         if (error == SUCCESS) {
+            if (serialization) {
+              BatchOpRequest req{};
+              create_dummy_batch_req(&req, opCount);
+              simple_to_string(&req);
+            }
+
           auto resp = HttpResponse::newHttpResponse();
           resp->setBody("OK");
           resp->setStatusCode(drogon::HttpStatusCode::k200OK);
@@ -304,6 +314,12 @@ int main() {
         if (s) {
           BatchOpRequest batchOpRequest = s.value();
           if (batchOpRequest.Operations.size() != 0) {
+            if (serialization) {
+              BatchOpRequest req{};
+              create_dummy_batch_req(&req, batchOpRequest.Operations.size());
+              glaze_to_string(&req);
+            }
+
             resp->setBody("OK");
             resp->setStatusCode(drogon::HttpStatusCode::k200OK);
             callback(resp);

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"math/rand"
@@ -14,6 +15,8 @@ import (
 type URITime struct {
 	Time int `json:"time" uri:"time"`
 }
+
+const serialize = true
 
 func main() {
 	runtime.GOMAXPROCS(16)
@@ -57,6 +60,15 @@ func main() {
 			fmt.Printf("Error %v\n", err)
 			c.AbortWithError(500, err)
 			return
+		}
+
+		if serialize {
+			_, err := json.Marshal(postParams)
+			if err != nil {
+				fmt.Printf("Error %v\n", err)
+				c.AbortWithError(500, err)
+				return
+			}
 		}
 
 		c.Writer.WriteString("OK")

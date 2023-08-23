@@ -74,25 +74,20 @@ Transfer/sec:      7.03MB                                         |  Transfer/se
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+With serialization
+```
+Go                                                                             c++ simd + simple serializer                                                 c++ glaze for serialization and deserialization
+Running 15s test @ http://localhost:4046/dbopjson/some_db/some_table        Running 15s test @ http://localhost:4046/dbopsimd/some_db/some_table          Running 15s test @ http://localhost:4046/dbopglaze/some_db/some_table
+  40 threads and 80 connections                                               40 threads and 80 connections                                                 40 threads and 80 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev                           Thread Stats   Avg      Stdev     Max   +/- Stdev                             Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     3.61ms    5.07ms  65.59ms   86.33%                              Latency   269.80us  434.46us  16.80ms   98.97%                                Latency   410.67us  681.42us  22.97ms   97.83%
+    Req/Sec     1.17k   269.58     6.41k    78.75%                              Req/Sec     8.34k     2.89k   26.25k    79.97%                                Req/Sec     5.85k     2.17k   16.97k    69.68%
+  Latency Distribution                                                        Latency Distribution                                                          Latency Distribution
+     50%    1.21ms                                                               50%  218.00us                                                                 50%  314.00us
+     75%    5.17ms                                                               75%  302.00us                                                                 75%  433.00us
+     90%   10.27ms                                                               90%  394.00us                                                                 90%  673.00us
+     99%   22.89ms                                                               99%  710.00us                                                                 99%    1.82ms
+  696672 requests in 15.10s, 78.40MB read                                     4994597 requests in 15.10s, 662.09MB read                                     3511369 requests in 15.10s, 465.47MB read
+Requests/sec:  46139.38                                                     Requests/sec: 330787.47                                                       Requests/sec: 232537.81
+Transfer/sec:      5.19MB                                                   Transfer/sec:     43.85MB                                                     Transfer/sec:     30.83MB
+```

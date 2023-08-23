@@ -39,4 +39,11 @@ struct glz::meta<ReadColumn> {
       object("column", &T::Column, "dataReturnType", &T::DataReturnType);
 };
 void glazeParse(BatchOpRequest *req);
+
+void glaze_to_string(BatchOpRequest *req);
+void create_dummy_batch_req(BatchOpRequest *req, int num_ops);
+
+void simple_to_string(BatchOpRequest *req);
+
+
 #endif
