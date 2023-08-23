@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.8)
 
-project (server LANGUAGES CXX VERSION 1.0.0)
+project (server LANGUAGES CXX C VERSION 1.0.0)
 message(Before=${CMAKE_MODULE_PATH})
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} /home/salman/code/cpp/benchmarks/drogon/install_dir/lib64/cmake)
 message(After=${CMAKE_MODULE_PATH})
@@ -38,6 +38,8 @@ file(GLOB SRC
 	*.cpp
 	*.h
 )
+
+message ("-----> Src files ${SRC}")
 
 find_package(OpenSSL REQUIRED)
 find_package(Drogon CONFIG REQUIRED)

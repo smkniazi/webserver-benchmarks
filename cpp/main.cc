@@ -1,6 +1,7 @@
 #include <drogon/HttpTypes.h>
 #include <drogon/drogon.h>
 
+// #define NDEBUG
 #include <chrono>
 #include <cmath>
 #include <cstdio>
@@ -8,9 +9,10 @@
 #include <memory>
 #include <string_view>
 #include <thread>
-#define NDEBUG
 #include "myglaze.h"
+#include "myyyjson.h"
 #include "simdjson.h"
+#include "yyjson.h"
 
 using namespace drogon;
 using namespace drogon::orm;
@@ -219,9 +221,7 @@ int parseBody(std::basic_string_view<char> &req_body, int thradID) {
 }
 
 int main() {
-  // `registerHandler()` adds a handler to the desired path. The handler is
-  // responsible for generating a HTTP response upon an HTTP request being
-  // sent to Drogon
+
   app().registerHandler(
       "/ping",
       [](const HttpRequestPtr &,
@@ -316,6 +316,33 @@ int main() {
             return;
           }
 
+        } else {
+          printf("Operation failed\n");
+          resp->setBody("NACK");
+          resp->setStatusCode(drogon::HttpStatusCode::k400BadRequest);
+          callback(resp);
+          return;
+        }
+      },
+      {Post});
+
+  app().registerHandler(
+      "/dbopyyjson/{db}/{table}",
+      [](const HttpRequestPtr &req,
+         std::function<void(const HttpResponsePtr &)> &&callback,
+         const std::string &db, const std::string table) {
+        auto req_body = req->getBody();
+        // printf("Current thread %d\n",app().getCurrentThreadIndex());
+
+        string body_str = std::string(req_body);
+        auto resp = HttpResponse::newHttpResponse();
+        BatchOpRequest batchOpRequest{};
+        parse_batch_yyjson(body_str.c_str(), &batchOpRequest);
+        if (batchOpRequest.Operations.size() != 0) {
+          resp->setBody("OK");
+          resp->setStatusCode(drogon::HttpStatusCode::k200OK);
+          callback(resp);
+          return;
         } else {
           printf("Operation failed\n");
           resp->setBody("NACK");

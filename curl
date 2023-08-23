@@ -33,4 +33,4 @@ read -r -d '' BODY << EOM
 }
 EOM
 
-curl -X POST  http://localhost:4046/dbopglaze/db1/table1 -H 'Content-Type: application/json' -d "$BODY"
+curl -X POST  http://localhost:4046/dbopyyjson/db1/table1 -H 'Content-Type: application/json' -d "$BODY"
