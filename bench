@@ -88,7 +88,7 @@ wrk $LUA_SCRIPT -d $BM_TIME -c $BM_CONNECTIONS -t $BM_THREADS --latency $URL &
 set +x
 
 client_pid=$!
-taskset -p $client_mask $server_pid
+taskset -p $client_mask $client_pid
 
 wait $client_pid
 
